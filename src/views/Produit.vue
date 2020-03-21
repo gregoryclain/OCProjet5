@@ -9,10 +9,16 @@
       </div>
       <div class="col-md-6">
         <div>{{ dataProduct.description }}</div>
-        <p class="mt-3">
-          <strong>{{ dataProduct.price }}</strong> €
-        </p>
-        <div class="row">
+        <div class="row my-3">
+          <div class="col-md-6">
+            <span>Prix :</span>
+          </div>
+          <div class="col-md-6 text-right">
+            <strong>{{ dataProduct.price }}</strong> €
+          </div>
+        </div>
+
+        <div class="row my-3">
           <div class="col-md-4">Couleur :</div>
           <div class="col-md-8">
             <select class="form-control" v-model="dataProduct.selectedVariant">
@@ -55,7 +61,28 @@ export default {
   },
   methods: {
     addToCart() {
-      console.log("add", this.dataProduct);
+      let currentCart = JSON.parse(window.localStorage.getItem("cart"));
+      // check if cart exist
+      if (currentCart && currentCart.length > 0) {
+        let checkDupplicateVariant = false;
+        currentCart.forEach(product => {
+          if (
+            product._id === this.dataProduct._id &&
+            product.selectedVariant === this.dataProduct.selectedVariant
+          ) {
+            checkDupplicateVariant = true;
+          }
+        });
+        if (checkDupplicateVariant == false) {
+          currentCart.push(this.dataProduct);
+          window.localStorage.setItem("cart", JSON.stringify(currentCart));
+        }
+      } else {
+        // création new cart
+        let cart = [];
+        cart.push(this.dataProduct);
+        window.localStorage.setItem("cart", JSON.stringify(cart));
+      }
     },
     getParams() {
       // TODO: Controle parametre
