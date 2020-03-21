@@ -83,6 +83,7 @@ export default {
         cart.push(this.dataProduct);
         window.localStorage.setItem("cart", JSON.stringify(cart));
       }
+      this.$router.push("/panier");
     },
     getParams() {
       // TODO: Controle parametre
