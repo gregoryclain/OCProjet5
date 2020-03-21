@@ -1,7 +1,7 @@
 <template>
   <default-layout>
     <h1 class="text-center">{{ dataProduct.name }}</h1>
-    <div class="row">
+    <div class="row" v-if="dataProduct">
       <div class="col-md-6">
         <figure>
           <img :src="dataProduct.imageUrl" :alt="dataProduct.name" class="img-thumbnail" />
@@ -12,9 +12,23 @@
         <p class="mt-3">
           <strong>{{ dataProduct.price }}</strong> €
         </p>
-        <p class="text-right">
-          <button type="button" class="btn btn-primary" @click="addToCart(dataProduct.id)"><i class="fa fa-cart-plus" aria-hidden="true"></i> Ajouter au panier</button>
-        </p>
+        <div class="row">
+          <div class="col-md-4">Couleur :</div>
+          <div class="col-md-8">
+            <select class="form-control" v-model="dataProduct.selectedVariant">
+              <option value>Veuillez choisir une couleur</option>
+              <option v-for="color in dataProduct.colors" :key="color.id">{{ color }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-md-6"></div>
+          <div class="col-md-6 text-right">
+            <button type="button" class="btn btn-primary" @click="addToCart(dataProduct.id)">
+              <i class="fa fa-cart-plus" aria-hidden="true"></i> Ajouter au panier
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </default-layout>
@@ -24,28 +38,36 @@
 import DefaultLayout from "@/layouts/defaultLayout.vue";
 
 export default {
-  name: "Home",
+  name: "Produit",
   components: {
     DefaultLayout
   },
   mounted: function() {
-    this.idProduct = this.$route.params.id;
+    this.getParams();
     this.fetchData();
   },
   data() {
     return {
       idProduct: null,
       isLoading: false,
-      dataProduct: []
+      dataProduct: {}
     };
   },
   methods: {
+    addToCart() {
+      console.log("add", this.dataProduct);
+    },
+    getParams() {
+      // TODO: Controle parametre
+      this.idProduct = this.$route.params.id;
+    },
     fetchData() {
       this.isLoading = true;
       this.$axios
         .get("http://localhost:3000/api/teddies/" + this.idProduct)
         .then(response => {
           this.dataProduct = response.data;
+          this.dataProduct.selectedVariant = "";
         })
         .catch(error => {
           console.log("error", error);
