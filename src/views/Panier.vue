@@ -43,14 +43,62 @@
           </tr>
         </tbody>
       </table>
-      <div class="row">
-        <div class="col-md-12 text-right">
-          <router-link to="/" class="btn btn-info btn-lg mr-4">Continuer mes achats</router-link>
-          <button type="button" class="btn btn-success btn-lg" @click="orderCart()">
-            <i class="fa fa-shopping-cart" aria-hidden="true"></i> Commander
-          </button>
+
+      <form>
+        <div class="row">
+          <div class="col-md-3"></div>
+          <div class="col-md-6">
+            <div class="row mb-2">
+              <div class="col-md-4">
+                <label>Nom :</label>
+              </div>
+              <div class="col-md-8">
+                <input type="text" class="form-control" v-model="contact.lastName.value" />
+              </div>
+            </div>
+            <div class="row mb-2">
+              <div class="col-md-4">
+                <label>Prénom :</label>
+              </div>
+              <div class="col-md-8">
+                <input type="text" class="form-control" v-model="contact.firstName.value" />
+              </div>
+            </div>
+            <div class="row mb-2">
+              <div class="col-md-4">
+                <label>Adresse :</label>
+              </div>
+              <div class="col-md-8">
+                <textarea class="form-control" v-model="contact.address.value"></textarea>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <div class="col-md-4">
+                <label>Ville :</label>
+              </div>
+              <div class="col-md-8">
+                <input type="text" class="form-control" v-model="contact.city.value" />
+              </div>
+            </div>
+            <div class="row mb-2">
+              <div class="col-md-4">
+                <label>Email :</label>
+              </div>
+              <div class="col-md-8">
+                <input type="email" class="form-control" v-model="contact.email.value" />
+              </div>
+            </div>
+            <div class="row mb-2">
+              <div class="col-md-4"></div>
+              <div class="col-md-8">
+                <button type="button" class="btn btn-success btn-lg btn-block" @click="orderCart()">
+                  <i class="fa fa-shopping-cart" aria-hidden="true"></i> Commander
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      </form>
     </div>
 
     <div class="alert alert-warning" role="alert" v-else>Votre panier est vide</div>
@@ -70,13 +118,51 @@ export default {
   },
   data() {
     return {
+      validUserInput: false,
       productList: [],
-      totalPrice: 0
+      totalPrice: 0,
+      order: {},
+      contact: {
+        firstName: { value: "testprénom ", error: "" },
+        lastName: { value: "testnom", error: "" },
+        address: { value: "testadress", error: "" },
+        city: { value: "test ville", error: "" },
+        email: { value: "testemail@emaildfd.com", error: "" }
+      }
     };
   },
   methods: {
     orderCart() {
-      console.log("je dois commander");
+      let urlApi = "http://localhost:3000/api/teddies/order";
+      let products = [];
+      this.productList.forEach(prod => {
+        products.push(prod._id.toString());
+      });
+
+      // TODO: control champs input
+
+      let payload = {
+        contact: {
+          firstName: this.contact.firstName.value,
+          lastName: this.contact.lastName.value,
+          address: this.contact.address.value,
+          city: this.contact.city.value,
+          email: this.contact.email.value
+        },
+        products: products
+      };
+
+      this.$axios
+        .post(urlApi, payload)
+        .then(response => {
+          console.log("response", response.data);
+          // retourne
+          // products: [,…]
+          // orderId: "18167c30-6bb9-11ea-914d-3df68d22038b"
+        })
+        .catch(error => {
+          console.log("error", error);
+        });
     },
     fetchInfosCart() {
       this.productList = JSON.parse(window.localStorage.getItem("cart"));
