@@ -18,7 +18,9 @@
               </p>
             </div>
             <div class="col-md-2">
-              <button type="button" class="btn btn-primary" @click="goToPage(data._id)"><i class="fa fa-eye" aria-hidden="true"></i> En savoir plus</button>
+              <button type="button" class="btn btn-primary" @click="goToPage(data._id)">
+                <i class="fa fa-eye" aria-hidden="true"></i> En savoir plus
+              </button>
             </div>
           </div>
         </article>

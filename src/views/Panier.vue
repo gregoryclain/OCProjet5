@@ -1,7 +1,7 @@
 <template>
   <default-layout>
     <h1>Panier</h1>
-    <div class="contentCart" v-if="productList.length > 0">
+    <div class="contentCart" v-if="productList && productList.length > 0">
       <table class="table">
         <thead>
           <tr>
@@ -156,9 +156,17 @@ export default {
         .post(urlApi, payload)
         .then(response => {
           console.log("response", response.data);
-          // retourne
-          // products: [,…]
-          // orderId: "18167c30-6bb9-11ea-914d-3df68d22038b"
+          // on supprime le local storage
+          window.localStorage.removeItem("cart");
+
+          // redirect vers la page de confirmation
+          this.$router.push({
+            name: "Confirmation",
+            params: {
+              products: response.data.products,
+              orderId: response.data.orderId
+            }
+          });
         })
         .catch(error => {
           console.log("error", error);
@@ -175,9 +183,11 @@ export default {
     },
     calculTotal() {
       this.totalPrice = 0;
-      this.productList.forEach(el => {
-        this.totalPrice += parseFloat(el.price);
-      });
+      if (this.productList.length > 0) {
+        this.productList.forEach(el => {
+          this.totalPrice += parseFloat(el.price);
+        });
+      }
     }
   }
 };

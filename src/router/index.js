@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import Panier from "../views/Panier.vue";
 import Produit from "../views/Produit.vue";
+import Confirmation from "../views/Confirmation.vue";
 
 Vue.use(VueRouter);
 
@@ -21,6 +22,11 @@ const routes = [
     path: "/produit/:id",
     name: "Produit",
     component: Produit
+  },
+  {
+    path: "/confirmation",
+    name: "Confirmation",
+    component: Confirmation
   }
 ];
 
