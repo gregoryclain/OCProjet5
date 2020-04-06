@@ -31,6 +31,7 @@
 
 <script>
 import DefaultLayout from "@/layouts/defaultLayout.vue";
+import axios from "axios";
 
 export default {
   name: "Home",
@@ -51,17 +52,14 @@ export default {
       this.$router.push("/produit/" + id);
     },
     fetchData() {
-      this.isLoading = true;
-      this.$axios
+      axios
+        // this.$axios
         .get("http://localhost:3000/api/teddies")
         .then(response => {
           this.listDataOurs = response.data;
         })
         .catch(error => {
           console.log("error", error);
-        })
-        .then(() => {
-          this.isLoading = false;
         });
     }
   }
