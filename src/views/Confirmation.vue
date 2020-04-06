@@ -15,7 +15,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(article) in productList" :key="article._id">
+            <tr v-for="(article,index) in productList" :key="article._id+index">
               <td>
                 <div class="row">
                   <div class="col-md-3">
@@ -47,6 +47,7 @@
 </template>
 
 <script>
+import { helpers } from "@/services/helpers.js";
 import DefaultLayout from "@/layouts/defaultLayout.vue";
 
 export default {
@@ -55,7 +56,7 @@ export default {
     DefaultLayout
   },
   mounted: function() {
-    console.log("param", this.$route);
+    // console.log("param", this.$route);
     this.setOrderInfos();
   },
   data() {
@@ -69,15 +70,7 @@ export default {
     setOrderInfos() {
       this.orderId = this.$route.params.orderId;
       this.productList = this.$route.params.products;
-      this.calculTotal();
-    },
-    calculTotal() {
-      this.totalPrice = 0;
-      if (this.productList.length > 0) {
-        this.productList.forEach(el => {
-          this.totalPrice += parseFloat(el.price);
-        });
-      }
+      this.totalPrice = helpers.calculTotal(this.productList);
     }
   }
 };

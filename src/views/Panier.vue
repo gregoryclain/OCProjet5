@@ -176,22 +176,11 @@ export default {
     fetchInfosCart() {
       this.productList = JSON.parse(window.localStorage.getItem("cart"));
       this.totalPrice = helpers.calculTotal(this.productList);
-      // this.calculTotal();
     },
     removeArticle(index) {
       this.productList.splice(index, 1);
       window.localStorage.setItem("cart", JSON.stringify(this.productList));
       this.totalPrice = helpers.calculTotal(this.productList);
-      // this.calculTotal();
-    },
-    calculTotal() {
-      this.totalPrice = 0;
-      this.totalPrice = helpers.calculTotal(this.productList);
-      // if (this.productList.length > 0) {
-      //   this.productList.forEach(el => {
-      //     this.totalPrice += parseFloat(el.price);
-      //   });
-      // }
     }
   }
 };
