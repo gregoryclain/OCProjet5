@@ -69,8 +69,10 @@ export default {
   methods: {
     setOrderInfos() {
       this.orderId = this.$route.params.orderId;
-      this.productList = this.$route.params.products;
-      this.totalPrice = helpers.calculTotal(this.productList);
+      if (this.$route.params.products) {
+        this.productList = this.$route.params.products;
+        this.totalPrice = helpers.calculTotal(this.productList);
+      }
     }
   }
 };

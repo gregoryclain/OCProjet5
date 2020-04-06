@@ -175,7 +175,9 @@ export default {
     },
     fetchInfosCart() {
       this.productList = JSON.parse(window.localStorage.getItem("cart"));
-      this.totalPrice = helpers.calculTotal(this.productList);
+      if (this.productList) {
+        this.totalPrice = helpers.calculTotal(this.productList);
+      }
     },
     removeArticle(index) {
       this.productList.splice(index, 1);
