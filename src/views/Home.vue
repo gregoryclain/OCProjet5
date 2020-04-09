@@ -1,7 +1,7 @@
 <template>
   <default-layout>
     <h1>Home</h1>
-    <ul class="list-group">
+    <ul class="list-group" v-if="listDataOurs">
       <li class="list-group-item" v-for="data in listDataOurs" :key="data.id">
         <article>
           <div class="row">
@@ -30,7 +30,9 @@
 </template>
 
 <script>
+import { helpers } from "@/services/helpers.js";
 import DefaultLayout from "@/layouts/defaultLayout.vue";
+// import axios from "axios";
 
 export default {
   name: "Home",
@@ -50,19 +52,12 @@ export default {
     goToPage(id) {
       this.$router.push("/produit/" + id);
     },
-    fetchData() {
-      this.isLoading = true;
-      this.$axios
-        .get("http://localhost:3000/api/teddies")
-        .then(response => {
-          this.listDataOurs = response.data;
-        })
-        .catch(error => {
-          console.log("error", error);
-        })
-        .then(() => {
-          this.isLoading = false;
-        });
+    async fetchData() {
+      this.listDataOurs = await helpers.callApi(
+        "get",
+        "http://localhost:3000/api/teddies",
+        ""
+      );
     }
   }
 };

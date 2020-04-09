@@ -41,6 +41,8 @@
 </template>
 
 <script>
+/* eslint-disable no-unused-vars */
+import { helpers } from "@/services/helpers.js";
 import DefaultLayout from "@/layouts/defaultLayout.vue";
 
 export default {
