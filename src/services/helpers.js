@@ -1,3 +1,6 @@
+/* eslint-disable no-unused-vars */
+import axios from "axios";
+
 function calculTotal(productList) {
   let totalPrice = 0;
   if (productList.length > 0) {
@@ -5,8 +8,19 @@ function calculTotal(productList) {
       totalPrice += parseFloat(el.price);
     });
   }
-
   return totalPrice;
 }
 
-export const helpers = { calculTotal };
+function callApi(method, url, payload) {
+  return axios({ method, url, payload })
+    .then((response) => {
+      console.log("response.data", response.data);
+      return response.data;
+    })
+    .catch((error) => {
+      console.log("error", error);
+      return false;
+    });
+}
+
+export const helpers = { calculTotal, callApi };

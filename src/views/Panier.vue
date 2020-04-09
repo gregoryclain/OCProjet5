@@ -54,6 +54,7 @@
               </div>
               <div class="col-md-8">
                 <input type="text" class="form-control" v-model="contact.lastName.value" />
+                {{ contact.lastName.error }}
               </div>
             </div>
             <div class="row mb-2">
@@ -62,6 +63,7 @@
               </div>
               <div class="col-md-8">
                 <input type="text" class="form-control" v-model="contact.firstName.value" />
+                {{ contact.firstName.error }}
               </div>
             </div>
             <div class="row mb-2">
@@ -70,6 +72,7 @@
               </div>
               <div class="col-md-8">
                 <textarea class="form-control" v-model="contact.address.value"></textarea>
+                {{ contact.address.error }}
               </div>
             </div>
             <div class="row mb-2">
@@ -78,6 +81,7 @@
               </div>
               <div class="col-md-8">
                 <input type="text" class="form-control" v-model="contact.city.value" />
+                {{ contact.city.error }}
               </div>
             </div>
             <div class="row mb-2">
@@ -86,6 +90,7 @@
               </div>
               <div class="col-md-8">
                 <input type="email" class="form-control" v-model="contact.email.value" />
+                {{ contact.email.error }}
               </div>
             </div>
             <div class="row mb-2">
@@ -106,6 +111,7 @@
 </template>
 
 <script>
+/* eslint-disable no-unused-vars */
 import { helpers } from "@/services/helpers.js";
 import DefaultLayout from "@/layouts/defaultLayout.vue";
 
@@ -117,6 +123,7 @@ export default {
   mounted() {
     this.fetchInfosCart();
   },
+
   data() {
     return {
       validUserInput: false,
@@ -124,8 +131,8 @@ export default {
       totalPrice: 0,
       order: {},
       contact: {
-        firstName: { value: "testprénom ", error: "" },
         lastName: { value: "testnom", error: "" },
+        firstName: { value: "testprénom ", error: "" },
         address: { value: "testadress", error: "" },
         city: { value: "test ville", error: "" },
         email: { value: "testemail@emaildfd.com", error: "" }
@@ -141,37 +148,77 @@ export default {
       });
 
       // TODO: control champs input
+      this.checkFields();
 
-      let payload = {
-        contact: {
-          firstName: this.contact.firstName.value,
-          lastName: this.contact.lastName.value,
-          address: this.contact.address.value,
-          city: this.contact.city.value,
-          email: this.contact.email.value
-        },
-        products: products
-      };
+      if (!this.validUserInput) {
+        let payload = {
+          contact: {
+            lastName: this.contact.lastName.value,
+            firstName: this.contact.firstName.value,
+            address: this.contact.address.value,
+            city: this.contact.city.value,
+            email: this.contact.email.value
+          },
+          products: products
+        };
 
-      this.$axios
-        .post(urlApi, payload)
-        .then(response => {
-          console.log("response", response.data);
-          // on supprime le local storage
-          window.localStorage.removeItem("cart");
+        this.$axios
+          .post(urlApi, payload)
+          .then(response => {
+            // on supprime le local storage
+            window.localStorage.removeItem("cart");
 
-          // redirect vers la page de confirmation
-          this.$router.push({
-            name: "Confirmation",
-            params: {
-              products: response.data.products,
-              orderId: response.data.orderId
-            }
+            // redirect vers la page de confirmation
+            this.$router.push({
+              name: "Confirmation",
+              params: {
+                products: response.data.products,
+                orderId: response.data.orderId
+              }
+            });
+          })
+          .catch(error => {
+            console.log("error", error);
           });
-        })
-        .catch(error => {
-          console.log("error", error);
-        });
+      }
+    },
+    checkFields() {
+      // eslint-disable-next-line no-useless-escape
+      const regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+      const regexStr = /[a-zA-Z]/g;
+
+      for (let propN1 in this.contact) {
+        for (let propN2 in this.contact[propN1]) {
+          this.contact[propN1]["error"] = ""; // clean champ error
+          if (this.contact[propN1]["value"].length < 3) {
+            // control nombre carac
+            this.contact[propN1]["error"] = "Nombre de caractères insuffisant";
+            this.validUserInput = true;
+          }
+        }
+      }
+
+      // controle type value
+      if (!regexStr.test(this.contact.firstName.value)) {
+        this.contact.firstName.error = "Le prénom n'est pas valide ";
+        this.validUserInput = true;
+      }
+      if (!regexStr.test(this.contact.lastName.value)) {
+        this.contact.lastName.error = "Le nom n'est pas valide ";
+        this.validUserInput = true;
+      }
+      if (!regexStr.test(this.contact.address.value)) {
+        this.contact.address.error = "L'adresse n'est pas valide";
+        this.validUserInput = true;
+      }
+      if (!regexStr.test(this.contact.city.value)) {
+        this.contact.city.error = "La ville n'est pas valide ";
+        this.validUserInput = true;
+      }
+      if (!regexEmail.test(this.contact.email.value)) {
+        this.contact.email.error = "L'email n'est pas valide ";
+        this.validUserInput = true;
+      }
     },
     fetchInfosCart() {
       this.productList = JSON.parse(window.localStorage.getItem("cart"));
