@@ -4,7 +4,7 @@ import axios from "axios";
 function calculTotal(productList) {
   let totalPrice = 0;
   if (productList.length > 0) {
-    productList.forEach((el) => {
+    productList.forEach(el => {
       totalPrice += parseFloat(el.price);
     });
   }
@@ -13,11 +13,10 @@ function calculTotal(productList) {
 
 function callApi(method, url, payload) {
   return axios({ method, url, payload })
-    .then((response) => {
-      console.log("response.data", response.data);
+    .then(response => {
       return response.data;
     })
-    .catch((error) => {
+    .catch(error => {
       console.log("error", error);
       return false;
     });

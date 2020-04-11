@@ -56,7 +56,6 @@ export default {
     DefaultLayout
   },
   mounted: function() {
-    // console.log("param", this.$route);
     this.setOrderInfos();
   },
   data() {

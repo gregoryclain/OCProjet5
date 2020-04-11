@@ -11,7 +11,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(article, index) in productList" :key="article._id+index">
+          <tr v-for="(article, index) in productList" :key="article._id + index">
             <td>
               <button type="button" class="btn btn-danger btn-sm" @click="removeArticle(index)">
                 <i class="fa fa-trash-o" aria-hidden="true"></i>
@@ -24,15 +24,15 @@
                 </div>
                 <div class="col-md-9">
                   <p>
-                    <strong>{{ article.name}}</strong>
+                    <strong>{{ article.name }}</strong>
                     <br />
-                    {{ article.description}}
+                    {{ article.description }}
                   </p>
-                  <p v-if="article.selectedVariant">Couleur : {{ article.selectedVariant}}</p>
+                  <p v-if="article.selectedVariant">Couleur : {{ article.selectedVariant }}</p>
                 </div>
               </div>
             </td>
-            <td class="text-right">{{ article.price}} €</td>
+            <td class="text-right">{{ article.price }} €</td>
           </tr>
           <tr>
             <td></td>
@@ -46,59 +46,68 @@
 
       <form>
         <div class="row">
-          <div class="col-md-3"></div>
-          <div class="col-md-6">
+          <div class="col-md-2"></div>
+          <div class="col-md-10">
             <div class="row mb-2">
-              <div class="col-md-4">
+              <div class="col-md-2">
                 <label>Nom :</label>
               </div>
-              <div class="col-md-8">
-                <input type="text" class="form-control" v-model="contact.lastName.value" />
-                {{ contact.lastName.error }}
+              <div class="col-md-4">
+                <input type="text" class="form-control" v-model="contact.lastName.value" @blur="checkOnfField('text', contact.lastName)" />
+              </div>
+              <div class="col-md-4">
+                <span class="errorZ" v-if="contact.lastName.error">{{ contact.lastName.error }}</span>
               </div>
             </div>
             <div class="row mb-2">
-              <div class="col-md-4">
+              <div class="col-md-2">
                 <label>Prénom :</label>
               </div>
-              <div class="col-md-8">
-                <input type="text" class="form-control" v-model="contact.firstName.value" />
-                {{ contact.firstName.error }}
+              <div class="col-md-4">
+                <input type="text" class="form-control" v-model="contact.firstName.value" @blur="checkOnfField('text', contact.firstName)" />
+              </div>
+              <div class="col-md-4">
+                <span class="errorZ" v-if="contact.firstName.error">{{ contact.firstName.error }}</span>
               </div>
             </div>
             <div class="row mb-2">
-              <div class="col-md-4">
+              <div class="col-md-2">
                 <label>Adresse :</label>
               </div>
-              <div class="col-md-8">
-                <textarea class="form-control" v-model="contact.address.value"></textarea>
-                {{ contact.address.error }}
+              <div class="col-md-4">
+                <textarea class="form-control" v-model="contact.address.value" @blur="checkOnfField('text', contact.address)"></textarea>
+              </div>
+              <div class="col-md-4">
+                <span class="errorZ" v-if="contact.address.error">{{ contact.address.error }}</span>
               </div>
             </div>
             <div class="row mb-2">
-              <div class="col-md-4">
+              <div class="col-md-2">
                 <label>Ville :</label>
               </div>
-              <div class="col-md-8">
-                <input type="text" class="form-control" v-model="contact.city.value" />
-                {{ contact.city.error }}
+              <div class="col-md-4">
+                <input type="text" class="form-control" v-model="contact.city.value" @blur="checkOnfField('text', contact.city)" />
+              </div>
+              <div class="col-md-4">
+                <span class="errorZ" v-if="contact.city.error">{{ contact.city.error }}</span>
               </div>
             </div>
             <div class="row mb-2">
-              <div class="col-md-4">
+              <div class="col-md-2">
                 <label>Email :</label>
               </div>
-              <div class="col-md-8">
-                <input type="email" class="form-control" v-model="contact.email.value" />
-                {{ contact.email.error }}
+              <div class="col-md-4">
+                <input type="email" class="form-control" v-model="contact.email.value" @blur="checkOnfField('email', contact.email)" />
+              </div>
+              <div class="col-md-4">
+                <span class="errorZ" v-if="contact.email.error">{{ contact.email.error }}</span>
               </div>
             </div>
             <div class="row mb-2">
-              <div class="col-md-4"></div>
-              <div class="col-md-8">
-                <button type="button" class="btn btn-success btn-lg btn-block" @click="orderCart()">
-                  <i class="fa fa-shopping-cart" aria-hidden="true"></i> Commander
-                </button>
+              <div class="col-md-2"></div>
+              <div class="col-md-4">
+                <router-link to="/" class="btn btn-info btn-lg btn-block mr-4 mb-1">Continuer mes achats</router-link>
+                <button type="button" class="btn btn-success btn-lg btn-block" @click="orderCart()"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Commander</button>
               </div>
             </div>
           </div>
@@ -131,11 +140,11 @@ export default {
       totalPrice: 0,
       order: {},
       contact: {
-        lastName: { value: "testnom", error: "" },
-        firstName: { value: "testprénom ", error: "" },
-        address: { value: "testadress", error: "" },
-        city: { value: "test ville", error: "" },
-        email: { value: "testemail@emaildfd.com", error: "" }
+        lastName: { value: "", error: "" },
+        firstName: { value: " ", error: "" },
+        address: { value: "", error: "" },
+        city: { value: "", error: "" },
+        email: { value: "", error: "" }
       }
     };
   },
@@ -183,6 +192,7 @@ export default {
       }
     },
     checkFields() {
+      this.validUserInput = false;
       // eslint-disable-next-line no-useless-escape
       const regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
       const regexStr = /[a-zA-Z]/g;
@@ -211,12 +221,35 @@ export default {
         this.contact.address.error = "L'adresse n'est pas valide";
         this.validUserInput = true;
       }
+
       if (!regexStr.test(this.contact.city.value)) {
         this.contact.city.error = "La ville n'est pas valide ";
         this.validUserInput = true;
       }
       if (!regexEmail.test(this.contact.email.value)) {
         this.contact.email.error = "L'email n'est pas valide ";
+        this.validUserInput = true;
+      }
+    },
+    checkOnfField(type, field) {
+      field.error = "";
+      // eslint-disable-next-line no-useless-escape
+      const regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+      const regexStr = /[a-zA-Z]/g;
+      if (type === "text") {
+        if (!regexStr.test(field.value)) {
+          field.error = "Le champs n'est pas valide ";
+          this.validUserInput = true;
+        }
+      }
+      if (type === "email") {
+        if (!regexEmail.test(field.value)) {
+          field.error = "L'email n'est pas au bon format";
+          this.validUserInput = true;
+        }
+      }
+      if (field.value.length < 3) {
+        field.error = "Le champs dois contenir au moins 3 caractères";
         this.validUserInput = true;
       }
     },
@@ -234,3 +267,11 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.errorZ {
+  color: darkred;
+  font-size: 0.8em;
+  font-weight: bold;
+}
+</style>
