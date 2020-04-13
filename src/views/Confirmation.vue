@@ -56,7 +56,7 @@ export default {
     DefaultLayout
   },
   mounted: function() {
-    this.setOrderInfos();
+    this.getOrderInfos();
   },
   data() {
     return {
@@ -66,7 +66,7 @@ export default {
     };
   },
   methods: {
-    setOrderInfos() {
+    getOrderInfos() {
       this.orderId = this.$route.params.orderId;
       if (this.$route.params.products) {
         this.productList = this.$route.params.products;
