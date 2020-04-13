@@ -53,7 +53,12 @@
                 <label>Nom :</label>
               </div>
               <div class="col-md-4">
-                <input type="text" class="form-control" v-model="contact.lastName.value" @blur="checkOnfField('text', contact.lastName)" />
+                <input
+                  type="text"
+                  class="form-control"
+                  v-model="contact.lastName.value"
+                  @blur="checkOnfField('text', contact.lastName)"
+                />
               </div>
               <div class="col-md-4">
                 <span class="errorZ" v-if="contact.lastName.error">{{ contact.lastName.error }}</span>
@@ -64,7 +69,12 @@
                 <label>Prénom :</label>
               </div>
               <div class="col-md-4">
-                <input type="text" class="form-control" v-model="contact.firstName.value" @blur="checkOnfField('text', contact.firstName)" />
+                <input
+                  type="text"
+                  class="form-control"
+                  v-model="contact.firstName.value"
+                  @blur="checkOnfField('text', contact.firstName)"
+                />
               </div>
               <div class="col-md-4">
                 <span class="errorZ" v-if="contact.firstName.error">{{ contact.firstName.error }}</span>
@@ -75,7 +85,11 @@
                 <label>Adresse :</label>
               </div>
               <div class="col-md-4">
-                <textarea class="form-control" v-model="contact.address.value" @blur="checkOnfField('text', contact.address)"></textarea>
+                <textarea
+                  class="form-control"
+                  v-model="contact.address.value"
+                  @blur="checkOnfField('text', contact.address)"
+                ></textarea>
               </div>
               <div class="col-md-4">
                 <span class="errorZ" v-if="contact.address.error">{{ contact.address.error }}</span>
@@ -86,7 +100,12 @@
                 <label>Ville :</label>
               </div>
               <div class="col-md-4">
-                <input type="text" class="form-control" v-model="contact.city.value" @blur="checkOnfField('text', contact.city)" />
+                <input
+                  type="text"
+                  class="form-control"
+                  v-model="contact.city.value"
+                  @blur="checkOnfField('text', contact.city)"
+                />
               </div>
               <div class="col-md-4">
                 <span class="errorZ" v-if="contact.city.error">{{ contact.city.error }}</span>
@@ -97,7 +116,12 @@
                 <label>Email :</label>
               </div>
               <div class="col-md-4">
-                <input type="email" class="form-control" v-model="contact.email.value" @blur="checkOnfField('email', contact.email)" />
+                <input
+                  type="email"
+                  class="form-control"
+                  v-model="contact.email.value"
+                  @blur="checkOnfField('email', contact.email)"
+                />
               </div>
               <div class="col-md-4">
                 <span class="errorZ" v-if="contact.email.error">{{ contact.email.error }}</span>
@@ -106,8 +130,13 @@
             <div class="row mb-2">
               <div class="col-md-2"></div>
               <div class="col-md-4">
-                <router-link to="/" class="btn btn-info btn-lg btn-block mr-4 mb-1">Continuer mes achats</router-link>
-                <button type="button" class="btn btn-success btn-lg btn-block" @click="orderCart()"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Commander</button>
+                <router-link
+                  to="/"
+                  class="btn btn-info btn-lg btn-block mr-4 mb-1"
+                >Continuer mes achats</router-link>
+                <button type="button" class="btn btn-success btn-lg btn-block" @click="orderCart()">
+                  <i class="fa fa-shopping-cart" aria-hidden="true"></i> Commander
+                </button>
               </div>
             </div>
           </div>
@@ -156,7 +185,6 @@ export default {
         products.push(prod._id.toString());
       });
 
-      // TODO: control champs input
       this.checkFields();
 
       if (!this.validUserInput) {

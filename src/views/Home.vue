@@ -50,7 +50,7 @@ export default {
   },
   methods: {
     goToPage(id) {
-      this.$router.push("/produit/" + id);
+      this.$router.push("/produit/" + id.toString());
     },
     async fetchData() {
       this.listDataOurs = await helpers.callApi(
@@ -58,6 +58,7 @@ export default {
         "http://localhost:3000/api/teddies",
         ""
       );
+      console.log("listDataOurs", this.listDataOurs);
     }
   }
 };

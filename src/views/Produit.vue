@@ -88,7 +88,6 @@ export default {
       this.$router.push("/panier");
     },
     getParams() {
-      // TODO: Controle parametre
       this.idProduct = this.$route.params.id;
     },
     fetchData() {
